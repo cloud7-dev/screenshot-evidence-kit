@@ -1,0 +1,40 @@
+{
+  "legalPackVersion": "kr-2026-06",
+  "country": "KR",
+  "language": "ko-KR",
+  "name": "Korea documentation checklist",
+  "disclaimer": "이 체크리스트는 일반적인 문서화 보조 정보이며 법률 자문, 소송 전략, 증거 채택 보장이 아닙니다.",
+  "defaultLimitations": [
+    "전자문서와 스크린샷의 효력 및 증거 가치는 사건별로 달라질 수 있습니다.",
+    "원본 파일, 제출용 렌더링, manifest를 함께 보관해야 무결성 설명이 쉬워집니다.",
+    "개인정보와 고유식별정보는 제출 전 반드시 확인하고 필요한 범위에서만 공개해야 합니다."
+  ],
+  "checklists": {
+    "common": [
+      "원본 스크린샷을 보관했는가?",
+      "각 증거의 출처와 일시를 적었는가?",
+      "제출용 PDF/HTML과 manifest를 함께 보관하는가?",
+      "전화번호, 주소, 계좌번호, 송장번호, 얼굴, 차량번호, 미성년자 정보를 확인했는가?"
+    ],
+    "marketplace_refund": [
+      "판매글 또는 상품 설명이 있는가?",
+      "상대방이 상품 상태를 설명한 대화가 있는가?",
+      "결제 또는 송금 내역이 있는가?",
+      "배송/수령/하자 발견 시점이 정리되어 있는가?",
+      "환불 또는 교환 요청과 상대방 답변이 있는가?"
+    ],
+    "online_shopping_refund": [
+      "주문 내역과 결제 내역이 있는가?",
+      "상품 상세 또는 광고 문구가 있는가?",
+      "배송 예정일과 실제 배송 또는 미배송 자료가 있는가?",
+      "하자 사진 또는 오류 화면이 있는가?",
+      "교환/환불 요청 내역과 판매자 답변이 있는가?"
+    ]
+  },
+  "sources": [
+    "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=161102",
+    "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=248613",
+    "https://www.law.go.kr/LSW/lsInfoP.do?efYd=20240213&lsiSeq=260399"
+  ]
+}
+

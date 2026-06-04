@@ -16,7 +16,8 @@
         </div>
       </div>
       <div class="header-actions">
-        <button id="verifySampleButton" class="ghost-button" type="button">Verify sample</button>
+        <button id="loadSampleButton" class="ghost-button" type="button">Load sample case</button>
+        <button id="verifySampleButton" class="ghost-button" type="button">Verify sample manifest</button>
         <button id="newCaseButton" class="ghost-button" type="button">New case</button>
       </div>
     </header>
@@ -97,6 +98,7 @@ The packet documents the timeline and integrity metadata.</textarea>
           </div>
           <div class="toolbar-actions">
             <button id="sortButton" type="button">Sort by time</button>
+            <button id="downloadZipButton" type="button">Export ZIP packet</button>
             <button id="downloadManifestButton" type="button">Generate manifest</button>
             <button id="downloadHashesButton" type="button">Export hashes.txt</button>
             <button id="downloadRendersButton" type="button">Export renders</button>
@@ -188,4 +190,3 @@ The packet documents the timeline and integrity metadata.</textarea>
     <script src="app.js"></script>
   </body>
 </html>
-

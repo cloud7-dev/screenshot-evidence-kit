@@ -1,0 +1,41 @@
+{
+  "legalPackVersion": "us-2026-06",
+  "country": "US",
+  "language": "en-US",
+  "name": "United States documentation checklist",
+  "disclaimer": "This checklist is general documentation information only. It is not legal advice, does not form an attorney-client relationship, and does not guarantee admissibility.",
+  "defaultLimitations": [
+    "Federal and state rules may differ.",
+    "Screenshots containing statements may raise context or hearsay issues.",
+    "The app documents integrity after import, not the truth of the screenshot content."
+  ],
+  "checklists": {
+    "common": [
+      "Can you explain what each screenshot is?",
+      "Can you identify the source app, website, or device?",
+      "Did you preserve the original file?",
+      "Does the manifest hash match?",
+      "Did you review personal information before sharing?"
+    ],
+    "marketplace_refund": [
+      "What did the listing say?",
+      "What did the seller represent about condition?",
+      "What payment or delivery evidence exists?",
+      "When was the problem discovered?",
+      "What outcome is requested?"
+    ],
+    "online_shopping_refund": [
+      "What was ordered?",
+      "What did the seller promise?",
+      "What was the promised shipping or delivery date?",
+      "Was the item wrong, defective, delayed, or never received?",
+      "Was a refund, platform dispute, or chargeback requested?"
+    ]
+  },
+  "sources": [
+    "https://www.law.cornell.edu/rules/fre/rule_901",
+    "https://www.law.cornell.edu/rules/fre/rule_902",
+    "https://consumer.ftc.gov/articles/online-shopping",
+    "https://www.ftc.gov/legal-library/browse/rules/mail-internet-or-telephone-order-merchandise-rule"
+  ]
+}

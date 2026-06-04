@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
 const ZERO_DIGEST = "0".repeat(64);
@@ -61,6 +61,23 @@ function loadManifest(manifestPath) {
   return JSON.parse(readFileSync(manifestPath, "utf8"));
 }
 
+function resolveManifestPath(inputPath) {
+  const resolved = path.resolve(inputPath);
+  const stats = statSync(resolved);
+  if (stats.isDirectory()) {
+    const candidates = [
+      path.join(resolved, "manifest.json"),
+      path.join(resolved, "evidence-manifest.json")
+    ];
+    const found = candidates.find((candidate) => existsSync(candidate));
+    if (!found) {
+      throw new Error(`No manifest.json or evidence-manifest.json found in ${resolved}`);
+    }
+    return found;
+  }
+  return resolved;
+}
+
 function fileDigest(baseDir, packetFile) {
   const fullPath = path.resolve(baseDir, packetFile.path);
   const buffer = readFileSync(fullPath);
@@ -72,7 +89,7 @@ function fileDigest(baseDir, packetFile) {
 }
 
 function verifyPacket(manifestPath) {
-  const resolvedManifestPath = path.resolve(manifestPath);
+  const resolvedManifestPath = resolveManifestPath(manifestPath);
   const baseDir = path.dirname(resolvedManifestPath);
   const manifest = loadManifest(resolvedManifestPath);
   const failures = [];
@@ -136,6 +153,7 @@ function printUsage() {
   console.error("Usage:");
   console.error("  node scripts/sek-verify.mjs digest <manifest.json>");
   console.error("  node scripts/sek-verify.mjs verify <manifest.json>");
+  console.error("  node scripts/sek-verify.mjs verify <packet-folder>");
 }
 
 const [command, manifestPath] = process.argv.slice(2);
@@ -146,7 +164,7 @@ if (!command || !manifestPath || !["digest", "verify"].includes(command)) {
 
 try {
   if (command === "digest") {
-    const manifest = loadManifest(path.resolve(manifestPath));
+    const manifest = loadManifest(resolveManifestPath(manifestPath));
     console.log(computeManifestDigest(manifest));
   } else {
     const result = verifyPacket(manifestPath);

@@ -50,3 +50,14 @@ The packet passes when:
 - all referenced files exist,
 - all file hashes match,
 - the recomputed manifest digest matches `integrity.manifestDigest`.
+
+## CLI Paths
+
+The CLI accepts either a manifest file or a packet folder:
+
+```bash
+./scripts/sek-verify.mjs verify examples/marketplace-refund/manifest.json
+./scripts/sek-verify.mjs verify examples/marketplace-refund
+```
+
+When a folder is passed, the verifier looks for `manifest.json` first, then `evidence-manifest.json`.

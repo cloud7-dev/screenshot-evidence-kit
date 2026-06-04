@@ -53,6 +53,7 @@ button:focus-visible {
 button.primary,
 .toolbar-actions button:first-of-type,
 #downloadManifestButton,
+#downloadZipButton,
 #runVerifyButton {
   background: var(--accent);
   border-color: var(--accent);
@@ -503,4 +504,3 @@ code {
     grid-template-columns: 1fr;
   }
 }
-

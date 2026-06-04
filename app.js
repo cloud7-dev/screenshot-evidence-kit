@@ -36,6 +36,7 @@ const els = {
   addRedactionButton: document.querySelector("#addRedactionButton"),
   redactionList: document.querySelector("#redactionList"),
   sortButton: document.querySelector("#sortButton"),
+  downloadZipButton: document.querySelector("#downloadZipButton"),
   downloadManifestButton: document.querySelector("#downloadManifestButton"),
   downloadHashesButton: document.querySelector("#downloadHashesButton"),
   downloadRendersButton: document.querySelector("#downloadRendersButton"),
@@ -44,6 +45,7 @@ const els = {
   verifyFilesInput: document.querySelector("#verifyFilesInput"),
   runVerifyButton: document.querySelector("#runVerifyButton"),
   verifyOutput: document.querySelector("#verifyOutput"),
+  loadSampleButton: document.querySelector("#loadSampleButton"),
   verifySampleButton: document.querySelector("#verifySampleButton"),
   newCaseButton: document.querySelector("#newCaseButton")
 };
@@ -173,6 +175,10 @@ async function renderItemBlob(item) {
   return blob;
 }
 
+async function blobFromText(text, type = "text/plain") {
+  return new Blob([text], { type });
+}
+
 async function refreshRendered(item) {
   const blob = await renderItemBlob(item);
   item.renderedBlob = blob;
@@ -208,6 +214,47 @@ async function addFiles(files) {
   render();
 }
 
+async function addSampleCase() {
+  resetCase();
+  els.caseTitle.value = "Used GPU refund dispute";
+  els.disputeType.value = "marketplace_refund";
+  els.requestedOutcome.value = "Refund or repair reimbursement";
+  els.country.value = "US";
+  els.language.value = "en-US";
+  els.legalPackVersion.value = "us-2026-06";
+  els.caseSummary.value = [
+    "Seller represented the item as working.",
+    "Buyer paid after the representation.",
+    "The packet demonstrates file integrity after import."
+  ].join("\n");
+  const response = await fetch("examples/marketplace-refund/originals/chat-001.svg");
+  const blob = await response.blob();
+  const file = new File([blob], "chat-001.svg", {
+    type: "image/svg+xml",
+    lastModified: Date.parse("2026-05-30T11:12:00Z")
+  });
+  await addFiles([file]);
+  const item = selectedItem();
+  if (item) {
+    item.sourceLabel = "Marketplace chat";
+    item.capturedAt = "2026-05-30T11:12:00.000Z";
+    item.note = "Seller represented that the item worked normally.";
+    item.redactions = [
+      {
+        id: "R-001",
+        label: "REDACTED CONTACT",
+        x: 0.78,
+        y: 0.72,
+        width: 0.15,
+        height: 0.06
+      }
+    ];
+    await refreshRendered(item);
+  }
+  els.verifyOutput.textContent = "Sample case loaded. Export the ZIP packet or generate a manifest to inspect the integrity metadata.";
+  render();
+}
+
 function selectedItem() {
   return state.items.find((item) => item.id === state.selectedId) ?? null;
 }
@@ -231,6 +278,19 @@ function caseSummaryLines() {
 }
 
 function manifestWithoutDigest() {
+  const legalModeLimitations = els.country.value === "KR"
+    ? [
+        "대한민국 모드는 사실관계와 개인정보 점검을 돕기 위한 문서화 체크리스트이며 법률 자문이 아닙니다.",
+        "전자문서/소비자분쟁 관련 설명은 일반 정보이며 증거 채택이나 분쟁 결과를 보장하지 않습니다."
+      ]
+    : els.country.value === "US"
+      ? [
+          "United States mode provides documentation and authentication prompts only, not legal advice.",
+          "Federal and state rules may differ; admissibility and hearsay issues are not decided by this app."
+        ]
+      : [
+          "No jurisdiction-specific legal checklist is selected."
+        ];
   const manifest = {
     formatVersion: "1.0.0",
     packetId: `sek-${Date.now()}`,
@@ -287,17 +347,47 @@ function manifestWithoutDigest() {
       "This technical packet format does not provide legal advice.",
       "This packet does not guarantee admissibility.",
       "File hashes verify integrity after import, not truth of screenshot content.",
-      "No blockchain or external timestamp proof is included in v1."
+      "No blockchain or external timestamp proof is included in v1.",
+      ...legalModeLimitations
     ]
   };
   return manifest;
 }
 
-async function buildManifest() {
+async function buildPacketParts() {
   const manifest = manifestWithoutDigest();
+  const packetHtmlText = packetHtml(manifest);
+  const packetBlob = await blobFromText(packetHtmlText, "text/html");
+  const packetArtifact = {
+    path: "packet.html",
+    sha256: await sha256(packetBlob),
+    mimeType: "text/html",
+    sizeBytes: packetBlob.size
+  };
+  manifest.packetArtifacts = [packetArtifact];
   manifest.integrity.packetRoot = (await packetRoot(manifest)) ?? ZERO_DIGEST;
   manifest.integrity.manifestDigest = await manifestDigest(manifest);
-  return manifest;
+  const finalPacketHtml = packetHtml(manifest);
+  const finalPacketBlob = await blobFromText(finalPacketHtml, "text/html");
+  manifest.packetArtifacts = [
+    {
+      path: "packet.html",
+      sha256: await sha256(finalPacketBlob),
+      mimeType: "text/html",
+      sizeBytes: finalPacketBlob.size
+    }
+  ];
+  manifest.integrity.manifestDigest = await manifestDigest(manifest);
+  return {
+    manifest,
+    hashesText: buildHashesText(manifest),
+    packetHtmlText: finalPacketHtml,
+    packetBlob: finalPacketBlob
+  };
+}
+
+async function buildManifest() {
+  return (await buildPacketParts()).manifest;
 }
 
 function buildHashesText(manifest) {
@@ -354,14 +444,16 @@ function packetHtml(manifest) {
   <meta charset="utf-8">
   <title>${escapeHtml(manifest.case.title)} Evidence Packet</title>
   <style>
-    body { font-family: Arial, sans-serif; color: #111827; margin: 32px; }
+    body { font-family: Arial, sans-serif; color: #111827; margin: 32px; line-height: 1.45; }
     h1 { font-size: 28px; }
     h2 { font-size: 20px; margin-top: 32px; }
+    h3 { font-size: 16px; margin-top: 24px; }
     table { border-collapse: collapse; width: 100%; margin: 20px 0; }
     th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
     img { max-width: 100%; border: 1px solid #d1d5db; }
     dd { word-break: break-all; margin-bottom: 8px; }
     .notice { border: 1px solid #d1d5db; padding: 12px; background: #f9fafb; }
+    .digest { word-break: break-all; font-family: monospace; font-size: 12px; }
     @media print { body { margin: 18mm; } .evidence-page { page-break-before: always; } }
   </style>
 </head>
@@ -372,8 +464,8 @@ function packetHtml(manifest) {
     <tr><th>Created</th><td>${manifest.createdAt}</td></tr>
     <tr><th>Jurisdiction</th><td>${manifest.jurisdiction.country}</td></tr>
     <tr><th>Dispute type</th><td>${manifest.case.disputeType}</td></tr>
-    <tr><th>Manifest digest</th><td>${manifest.integrity.manifestDigest}</td></tr>
-    <tr><th>Packet root</th><td>${manifest.integrity.packetRoot}</td></tr>
+    <tr><th>Manifest digest</th><td class="digest">Recorded in manifest.json</td></tr>
+    <tr><th>Packet root</th><td class="digest">${manifest.integrity.packetRoot}</td></tr>
   </table>
   <h2>Summary</h2>
   <ul>${manifest.case.summary.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
@@ -384,6 +476,10 @@ function packetHtml(manifest) {
       .map((item) => `<tr><td>${item.id}</td><td>${escapeHtml(item.capturedAt || "")}</td><td>${escapeHtml(item.sourceLabel)}</td><td>${escapeHtml(item.note)}</td></tr>`)
       .join("")}</tbody>
   </table>
+  <h2>Limitations</h2>
+  <ul>${manifest.limitations.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
+  <h2>Print to PDF</h2>
+  <p>Use your browser print dialog and choose Save as PDF. Native binary PDF export is not included in this v0.2 static app.</p>
   ${itemSections}
 </body>
 </html>`;
@@ -405,8 +501,8 @@ async function exportManifest() {
 
 async function exportHashes() {
   if (state.items.length === 0) return;
-  const manifest = await buildManifest();
-  downloadText(buildHashesText(manifest), "hashes.txt");
+  const parts = await buildPacketParts();
+  downloadText(parts.hashesText, "hashes.txt");
 }
 
 async function exportRenders() {
@@ -417,8 +513,114 @@ async function exportRenders() {
 
 async function exportPacket() {
   if (state.items.length === 0) return;
-  const manifest = await buildManifest();
-  downloadText(packetHtml(manifest), "evidence-packet.html", "text/html");
+  const parts = await buildPacketParts();
+  downloadText(parts.packetHtmlText, "packet.html", "text/html");
+}
+
+function crc32(bytes) {
+  let crc = -1;
+  for (let index = 0; index < bytes.length; index += 1) {
+    crc ^= bytes[index];
+    for (let bit = 0; bit < 8; bit += 1) {
+      crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1));
+    }
+  }
+  return (crc ^ -1) >>> 0;
+}
+
+function uint16(value) {
+  return [value & 0xff, (value >>> 8) & 0xff];
+}
+
+function uint32(value) {
+  return [value & 0xff, (value >>> 8) & 0xff, (value >>> 16) & 0xff, (value >>> 24) & 0xff];
+}
+
+async function zipStore(entries) {
+  const encoder = new TextEncoder();
+  const chunks = [];
+  const central = [];
+  let offset = 0;
+  for (const entry of entries) {
+    const nameBytes = encoder.encode(entry.name);
+    const data = new Uint8Array(await entry.blob.arrayBuffer());
+    const crc = crc32(data);
+    const local = new Uint8Array([
+      ...uint32(0x04034b50),
+      ...uint16(20),
+      ...uint16(0x0800),
+      ...uint16(0),
+      ...uint16(0),
+      ...uint16(0),
+      ...uint32(crc),
+      ...uint32(data.length),
+      ...uint32(data.length),
+      ...uint16(nameBytes.length),
+      ...uint16(0)
+    ]);
+    chunks.push(local, nameBytes, data);
+    central.push({
+      nameBytes,
+      crc,
+      size: data.length,
+      offset
+    });
+    offset += local.length + nameBytes.length + data.length;
+  }
+
+  const centralStart = offset;
+  for (const entry of central) {
+    const header = new Uint8Array([
+      ...uint32(0x02014b50),
+      ...uint16(20),
+      ...uint16(20),
+      ...uint16(0x0800),
+      ...uint16(0),
+      ...uint16(0),
+      ...uint16(0),
+      ...uint32(entry.crc),
+      ...uint32(entry.size),
+      ...uint32(entry.size),
+      ...uint16(entry.nameBytes.length),
+      ...uint16(0),
+      ...uint16(0),
+      ...uint16(0),
+      ...uint16(0),
+      ...uint32(0),
+      ...uint32(entry.offset)
+    ]);
+    chunks.push(header, entry.nameBytes);
+    offset += header.length + entry.nameBytes.length;
+  }
+  const centralSize = offset - centralStart;
+  chunks.push(new Uint8Array([
+    ...uint32(0x06054b50),
+    ...uint16(0),
+    ...uint16(0),
+    ...uint16(central.length),
+    ...uint16(central.length),
+    ...uint32(centralSize),
+    ...uint32(centralStart),
+    ...uint16(0)
+  ]));
+
+  return new Blob(chunks, { type: "application/zip" });
+}
+
+async function exportZipPacket() {
+  if (state.items.length === 0) return;
+  const parts = await buildPacketParts();
+  const entries = [
+    { name: "manifest.json", blob: await blobFromText(`${JSON.stringify(parts.manifest, null, 2)}\n`, "application/json") },
+    { name: "hashes.txt", blob: await blobFromText(parts.hashesText) },
+    { name: "packet.html", blob: parts.packetBlob }
+  ];
+  for (const item of state.items) {
+    entries.push({ name: `rendered/${item.id}-redacted.png`, blob: item.renderedBlob });
+    entries.push({ name: `originals/${item.originalName}`, blob: item.file });
+  }
+  const zipBlob = await zipStore(entries);
+  downloadBlob(zipBlob, "evidence-packet.zip");
 }
 
 function render() {
@@ -625,6 +827,7 @@ els.sortButton.addEventListener("click", () => {
   state.items.sort((a, b) => String(a.capturedAt || a.importedAt).localeCompare(String(b.capturedAt || b.importedAt)));
   render();
 });
+els.downloadZipButton.addEventListener("click", exportZipPacket);
 els.downloadManifestButton.addEventListener("click", exportManifest);
 els.downloadHashesButton.addEventListener("click", exportHashes);
 els.downloadRendersButton.addEventListener("click", exportRenders);
@@ -638,15 +841,15 @@ els.verifyFilesInput.addEventListener("change", (event) => {
 });
 els.runVerifyButton.addEventListener("click", runVerify);
 els.newCaseButton.addEventListener("click", resetCase);
+els.loadSampleButton.addEventListener("click", addSampleCase);
 els.verifySampleButton.addEventListener("click", async () => {
   const response = await fetch("examples/marketplace-refund/manifest.json");
   state.verifyManifest = await response.json();
   els.verifyOutput.textContent = [
     "Loaded sample manifest.",
     "To verify sample files in the browser, choose the sample files from examples/marketplace-refund.",
-    "CLI verification is available with: ./scripts/sek-verify.mjs verify examples/marketplace-refund/manifest.json"
+    "CLI verification is available with: ./scripts/sek-verify.mjs verify examples/marketplace-refund"
   ].join("\n");
 });
 
 render();
-

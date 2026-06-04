@@ -12,8 +12,7 @@ It contains:
 Run:
 
 ```bash
-node ../../scripts/sek-verify.mjs verify manifest.json
+../../scripts/sek-verify.mjs verify .
 ```
 
 The verifier does not prove the screenshot content is true. It only checks that the files match the hashes recorded in the manifest.
-
