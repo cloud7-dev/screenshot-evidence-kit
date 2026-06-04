@@ -1,0 +1,73 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 1048 >>
+stream
+BT
+/F1 11 Tf
+50 770 Td
+14 TL
+(Screenshot Evidence Kit - Evidence Packet Cover) Tj
+T*
+() Tj
+T*
+(Case: Used GPU refund dispute) Tj
+T*
+(Created: 2026-06-04T00:00:00Z) Tj
+T*
+(Manifest digest: 1d1c7b6c0b3975796366f3e1258479cb8feff56dbb655051d4ef30a8f6ecb2b9) Tj
+T*
+(Packet root: 274b99fed572b54b2eb64f538628f279e7f04bf69d76a3e49e320c5c237d081a) Tj
+T*
+(Original files included: Yes) Tj
+T*
+() Tj
+T*
+(Timeline) Tj
+T*
+(E-001 | 2026-05-30T11:12:00Z | Marketplace chat) Tj
+T*
+(  Seller represented that the item worked normally.) Tj
+T*
+() Tj
+T*
+(Limitations) Tj
+T*
+(- This technical packet format does not provide legal advice.) Tj
+T*
+(- This packet does not guarantee admissibility.) Tj
+T*
+(- File hashes verify integrity after import, not truth of screenshot content.) Tj
+T*
+(- No blockchain or external timestamp proof is included in v1.) Tj
+T*
+(- United States mode provides documentation and authentication prompts only, not legal advice.) Tj
+T*
+(- Federal and state rules may differ; admissibility and hearsay issues are not decided by this app.) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000185 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1410
+%%EOF

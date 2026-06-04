@@ -1,8 +1,0 @@
-Screenshot Evidence Kit sample packet
-
-Case: Used GPU refund dispute
-Generated for: local integrity verification demo
-
-This text file stands in for a generated PDF in the public core sample.
-The manifest records this artifact hash so the verifier can detect changes.
-

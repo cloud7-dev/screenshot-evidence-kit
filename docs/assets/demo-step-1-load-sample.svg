@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">Load sample case</title>
+  <desc id="desc">Screenshot Evidence Kit demo step showing the Load sample case button.</desc>
+  <rect width="960" height="360" fill="#f7f8fa"/>
+  <rect x="32" y="28" width="896" height="72" rx="8" fill="#ffffff" stroke="#dce3e7"/>
+  <rect x="56" y="44" width="40" height="40" rx="8" fill="#192126"/>
+  <text x="65" y="69" fill="#ffffff" font-family="Arial, sans-serif" font-size="12" font-weight="700">SEK</text>
+  <text x="112" y="58" fill="#192126" font-family="Arial, sans-serif" font-size="20" font-weight="700">Screenshot Evidence Kit</text>
+  <text x="112" y="80" fill="#64717a" font-family="Arial, sans-serif" font-size="13">Local evidence packet builder. No upload, no legal advice.</text>
+  <rect x="664" y="45" width="148" height="38" rx="8" fill="#087f7a"/>
+  <text x="689" y="69" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">Load sample case</text>
+  <rect x="32" y="124" width="280" height="204" rx="8" fill="#ffffff" stroke="#dce3e7"/>
+  <text x="56" y="154" fill="#192126" font-family="Arial, sans-serif" font-size="13" font-weight="700">CASE DETAILS</text>
+  <rect x="56" y="176" width="224" height="34" rx="6" fill="#f0f4f5" stroke="#dce3e7"/>
+  <text x="68" y="198" fill="#192126" font-family="Arial, sans-serif" font-size="13">Used GPU refund dispute</text>
+  <rect x="336" y="124" width="592" height="204" rx="8" fill="#ffffff" stroke="#dce3e7"/>
+  <text x="360" y="154" fill="#192126" font-family="Arial, sans-serif" font-size="18" font-weight="700">Evidence Timeline</text>
+  <rect x="360" y="180" width="544" height="92" rx="8" fill="#f0f4f5" stroke="#dce3e7" stroke-dasharray="5 5"/>
+  <text x="538" y="233" fill="#64717a" font-family="Arial, sans-serif" font-size="15">Click Load sample case</text>
+</svg>

@@ -37,11 +37,14 @@ For every evidence item:
 - Compute SHA-256 and compare with `files.original.sha256`.
 - Read `files.rendered.path` relative to the manifest directory.
 - Compute SHA-256 and compare with `files.rendered.sha256`.
+- If `packetOptions.originalsIncluded` is `false`, missing `originals/` files are reported as skipped instead of failed.
 
 For every packet artifact:
 
 - Read `packetArtifacts[].path` relative to the manifest directory.
 - Compute SHA-256 and compare with `packetArtifacts[].sha256`.
+
+If `hashes.txt` exists, verify readable companion checksum entries such as `packet.pdf`. `hashes.txt` itself is not self-hashed to avoid circular checksums.
 
 ## Verification Result
 
@@ -58,6 +61,9 @@ The CLI accepts either a manifest file or a packet folder:
 ```bash
 ./scripts/sek-verify.mjs verify examples/marketplace-refund/manifest.json
 ./scripts/sek-verify.mjs verify examples/marketplace-refund
+./scripts/sek-verify.mjs verify examples/marketplace-refund/evidence-packet.zip
 ```
 
 When a folder is passed, the verifier looks for `manifest.json` first, then `evidence-manifest.json`.
+
+When a ZIP is passed, the verifier reads `manifest.json` from the archive and verifies files by their packet paths. The dependency-free ZIP reader supports store-mode ZIP files, which is the format produced by the browser app.

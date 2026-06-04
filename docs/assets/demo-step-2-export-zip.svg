@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">Export ZIP packet</title>
+  <desc id="desc">Screenshot Evidence Kit demo step showing one loaded evidence item and the Export ZIP packet button.</desc>
+  <rect width="960" height="360" fill="#f7f8fa"/>
+  <rect x="32" y="28" width="896" height="72" rx="8" fill="#ffffff" stroke="#dce3e7"/>
+  <text x="56" y="70" fill="#192126" font-family="Arial, sans-serif" font-size="20" font-weight="700">Screenshot Evidence Kit</text>
+  <rect x="336" y="124" width="592" height="204" rx="8" fill="#ffffff" stroke="#dce3e7"/>
+  <text x="360" y="154" fill="#192126" font-family="Arial, sans-serif" font-size="18" font-weight="700">Evidence Timeline</text>
+  <text x="360" y="176" fill="#64717a" font-family="Arial, sans-serif" font-size="13">1 item ready for local verification.</text>
+  <rect x="360" y="198" width="544" height="96" rx="8" fill="#ffffff" stroke="#087f7a"/>
+  <rect x="378" y="214" width="120" height="64" rx="6" fill="#f0f4f5" stroke="#dce3e7"/>
+  <text x="524" y="232" fill="#192126" font-family="Arial, sans-serif" font-size="15" font-weight="700">E-001 chat-001.svg</text>
+  <text x="524" y="256" fill="#64717a" font-family="Arial, sans-serif" font-size="13">Seller represented that the item worked normally.</text>
+  <rect x="646" y="142" width="136" height="38" rx="8" fill="#087f7a"/>
+  <text x="669" y="166" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">Export ZIP packet</text>
+  <rect x="794" y="142" width="126" height="38" rx="8" fill="#087f7a"/>
+  <text x="814" y="166" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">Export PDF cover</text>
+</svg>

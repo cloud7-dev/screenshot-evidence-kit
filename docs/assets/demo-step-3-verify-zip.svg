@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">Verify ZIP packet</title>
+  <desc id="desc">Screenshot Evidence Kit demo step showing ZIP verification passing.</desc>
+  <rect width="960" height="360" fill="#f7f8fa"/>
+  <rect x="32" y="28" width="896" height="72" rx="8" fill="#ffffff" stroke="#dce3e7"/>
+  <text x="56" y="70" fill="#192126" font-family="Arial, sans-serif" font-size="20" font-weight="700">Screenshot Evidence Kit</text>
+  <rect x="560" y="124" width="368" height="204" rx="8" fill="#ffffff" stroke="#dce3e7"/>
+  <text x="584" y="154" fill="#192126" font-family="Arial, sans-serif" font-size="13" font-weight="700">VERIFIER</text>
+  <rect x="584" y="176" width="320" height="34" rx="6" fill="#f0f4f5" stroke="#dce3e7"/>
+  <text x="596" y="198" fill="#64717a" font-family="Arial, sans-serif" font-size="13">evidence-packet.zip</text>
+  <rect x="584" y="224" width="320" height="78" rx="8" fill="#111827"/>
+  <text x="600" y="250" fill="#d1fae5" font-family="SFMono-Regular, Consolas, monospace" font-size="12">ok manifest digest</text>
+  <text x="600" y="270" fill="#d1fae5" font-family="SFMono-Regular, Consolas, monospace" font-size="12">ok packet root</text>
+  <text x="600" y="290" fill="#d1fae5" font-family="SFMono-Regular, Consolas, monospace" font-size="12">Verification passed.</text>
+  <rect x="32" y="124" width="500" height="204" rx="8" fill="#ffffff" stroke="#dce3e7"/>
+  <text x="56" y="158" fill="#192126" font-family="Arial, sans-serif" font-size="22" font-weight="700">Local verification</text>
+  <text x="56" y="188" fill="#64717a" font-family="Arial, sans-serif" font-size="15">No server upload. ZIP contents are checked in the browser or CLI.</text>
+</svg>

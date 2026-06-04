@@ -20,8 +20,8 @@ Sample evidence screenshot:
 
 - Builds a timeline from dispute screenshots.
 - Creates separate redacted submission renders.
-- Exports `evidence-packet.zip` with `manifest.json`, `hashes.txt`, `packet.html`, `rendered/`, and `originals/`.
-- Verifies SHA-256 file hashes, manifest digest, and packet root locally.
+- Exports `evidence-packet.zip` with `manifest.json`, `hashes.txt`, `packet.html`, `packet.pdf`, `rendered/`, and optional `originals/`.
+- Verifies ZIP packets, SHA-256 file hashes, manifest digest, and packet root locally.
 - Provides Korea and United States general-information checklist groundwork.
 
 ## What It Does Not Do
@@ -30,7 +30,15 @@ Sample evidence screenshot:
 - It does not recommend lawyers.
 - It does not guarantee admissibility.
 - It does not prove screenshot contents are true.
-- It does not use blockchain in v0.2.
+- It does not use blockchain in v0.3.
+
+## Demo Flow
+
+![Load sample case](docs/assets/demo-step-1-load-sample.svg)
+
+![Export ZIP packet](docs/assets/demo-step-2-export-zip.svg)
+
+![Verify ZIP packet](docs/assets/demo-step-3-verify-zip.svg)
 
 ## Use The Local Web App
 
@@ -51,10 +59,11 @@ Core workflow:
 1. Add screenshots by drag and drop, file picker, or clipboard paste.
 2. Edit case details, country mode, timeline source, timestamp, and notes.
 3. Add opaque redaction rectangles to create a separate submission render.
-4. Export `evidence-packet.zip`.
-5. Verify the manifest and supporting files locally.
+4. Keep `Include originals in ZIP` on for full local verification, or turn it off for a privacy-reduced packet.
+5. Export `evidence-packet.zip` or a standalone `packet.pdf` cover.
+6. Verify the ZIP, manifest folder, or manifest file locally.
 
-`packet.html` is designed for browser print-to-PDF. Native binary PDF generation is planned for a later version.
+`packet.html` is designed for browser print-to-PDF. v0.3 also exports a basic `packet.pdf` cover containing the manifest digest, packet root, timeline, and limitations.
 
 ## What Is Public
 
@@ -91,6 +100,7 @@ Optional RFC 3161 or OpenTimestamps proof can be added later for existence-time 
 
 ```bash
 node scripts/sek-verify.mjs verify examples/marketplace-refund
+node scripts/sek-verify.mjs verify examples/marketplace-refund/evidence-packet.zip
 ```
 
 The command checks file hashes, recomputes the canonical manifest digest, and reports whether the packet is intact.
@@ -102,10 +112,13 @@ ok manifest digest
 ok packet root
 ok E-001.original
 ok E-001.rendered
-ok artifact:packet-summary.txt
-ok artifact:hashes.txt
+ok artifact:packet.html
+ok hashes.txt:originals/chat-001.svg
+ok hashes.txt:rendered/chat-001-redacted.svg
+ok hashes.txt:packet.html
+ok hashes.txt:packet.pdf
 
-Verification passed. manifestDigest=44456b7590da182eaa9dee8569c7117f4639cef272480614ad4b6530eaca853e
+Verification passed. manifestDigest=1d1c7b6c0b3975796366f3e1258479cb8feff56dbb655051d4ef30a8f6ecb2b9
 ```
 
 You can also verify a manifest file directly:
@@ -117,9 +130,11 @@ node scripts/sek-verify.mjs verify examples/marketplace-refund/manifest.json
 ## Packet Format Notes
 
 - `packetArtifacts` lists generated packet files such as `packet.html`; `hashes.txt` is exported as a readable companion checksum file.
+- `packet.pdf` is a companion export listed in `hashes.txt` because it includes the final manifest digest and would otherwise create a circular artifact hash.
 - `packetRoot` is a Merkle root over evidence item original/rendered hashes.
 - `manifestDigest` is computed from canonical JSON with `integrity.manifestDigest` zeroed during calculation.
-- Timestamp proof is intentionally optional and not part of v0.2.
+- `packetOptions.originalsIncluded=false` means original file hashes remain recorded, but original file reads are skipped unless those files are supplied separately.
+- Timestamp proof is intentionally optional and not part of v0.3.
 
 ## Repository Layout
 

@@ -129,6 +129,13 @@
       "type": "array",
       "items": { "$ref": "#/$defs/packetFile" }
     },
+    "packetOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "originalsIncluded": { "type": "boolean" }
+      }
+    },
     "integrity": {
       "type": "object",
       "required": ["hashAlgorithm", "canonicalization", "manifestDigest"],

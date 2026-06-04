@@ -54,6 +54,7 @@ button.primary,
 .toolbar-actions button:first-of-type,
 #downloadManifestButton,
 #downloadZipButton,
+#downloadPdfButton,
 #runVerifyButton {
   background: var(--accent);
   border-color: var(--accent);
@@ -63,6 +64,8 @@ button.primary,
 button.primary:hover,
 .toolbar-actions button:first-of-type:hover,
 #downloadManifestButton:hover,
+#downloadZipButton:hover,
+#downloadPdfButton:hover,
 #runVerifyButton:hover {
   background: var(--accent-dark);
 }
@@ -263,6 +266,11 @@ textarea:focus {
   color: var(--muted);
   font-size: 13px;
   margin-top: 4px;
+}
+
+.export-option {
+  margin: 10px 0 0;
+  color: var(--text);
 }
 
 .timeline {

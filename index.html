@@ -95,10 +95,15 @@ The packet documents the timeline and integrity metadata.</textarea>
           <div>
             <h2>Evidence Timeline</h2>
             <p id="timelineMeta">No items yet.</p>
+            <label class="checkbox-label export-option">
+              <input id="includeOriginalsInput" type="checkbox" checked>
+              Include originals in ZIP
+            </label>
           </div>
           <div class="toolbar-actions">
             <button id="sortButton" type="button">Sort by time</button>
             <button id="downloadZipButton" type="button">Export ZIP packet</button>
+            <button id="downloadPdfButton" type="button">Export PDF cover</button>
             <button id="downloadManifestButton" type="button">Generate manifest</button>
             <button id="downloadHashesButton" type="button">Export hashes.txt</button>
             <button id="downloadRendersButton" type="button">Export renders</button>
@@ -154,6 +159,10 @@ The packet documents the timeline and integrity metadata.</textarea>
 
         <section class="panel">
           <h2>Verifier</h2>
+          <label>
+            ZIP packet
+            <input id="verifyZipInput" type="file" accept=".zip,application/zip">
+          </label>
           <label>
             Manifest
             <input id="verifyManifestInput" type="file" accept="application/json">

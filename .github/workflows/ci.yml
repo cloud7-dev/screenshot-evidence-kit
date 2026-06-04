@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check app.js
+          node --check scripts/sek-verify.mjs
+
+      - name: Parse JSON fixtures
+        run: |
+          node -e 'for (const f of ["schema/evidence-manifest.schema.json","examples/marketplace-refund/manifest.json","legal-packs/kr/pack.json","legal-packs/us/pack.json"]) { JSON.parse(require("fs").readFileSync(f, "utf8")); console.log("ok", f); }'
+
+      - name: Verify sample packet
+        run: |
+          ./scripts/sek-verify.mjs verify examples/marketplace-refund
+          ./scripts/sek-verify.mjs verify examples/marketplace-refund/manifest.json
+          ./scripts/sek-verify.mjs verify examples/marketplace-refund/evidence-packet.zip
