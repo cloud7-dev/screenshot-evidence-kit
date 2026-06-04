@@ -1,4 +1,4 @@
-# Screenshot Evidence Kit Upgrade Plan
+# VeriPacket Upgrade Plan
 
 작성일: 2026-06-03
 
@@ -252,7 +252,7 @@ UX 포인트:
 흐름:
 
 1. 사용자가 휴대폰에서 스크린샷을 찍는다.
-2. 공유 메뉴에서 `Screenshot Evidence Kit`을 고른다.
+2. 공유 메뉴에서 `VeriPacket`을 고른다.
 3. PWA가 해당 이미지를 inbox에 넣는다.
 4. 나중에 데스크톱에서 PDF를 정리한다.
 
@@ -288,8 +288,8 @@ UX 포인트:
 예시 사용:
 
 ```bash
-sek verify evidence-manifest.json
-sek verify packet.pdf evidence-manifest.json
+veripacket verify evidence-manifest.json
+veripacket verify packet.pdf evidence-manifest.json
 ```
 
 장점:

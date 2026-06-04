@@ -1,4 +1,4 @@
-# Screenshot Evidence Kit
+# VeriPacket
 
 Local-first tools and public technical documents for turning dispute screenshots into chronological, verifiable evidence packets.
 
@@ -99,8 +99,8 @@ Optional RFC 3161 or OpenTimestamps proof can be added later for existence-time 
 ## Quick Verify
 
 ```bash
-node scripts/sek-verify.mjs verify examples/marketplace-refund
-node scripts/sek-verify.mjs verify examples/marketplace-refund/evidence-packet.zip
+node scripts/veripacket-verify.mjs verify examples/marketplace-refund
+node scripts/veripacket-verify.mjs verify examples/marketplace-refund/evidence-packet.zip
 ```
 
 The command checks file hashes, recomputes the canonical manifest digest, and reports whether the packet is intact.
@@ -118,13 +118,13 @@ ok hashes.txt:rendered/chat-001-redacted.svg
 ok hashes.txt:packet.html
 ok hashes.txt:packet.pdf
 
-Verification passed. manifestDigest=1d1c7b6c0b3975796366f3e1258479cb8feff56dbb655051d4ef30a8f6ecb2b9
+Verification passed. manifestDigest=9b11b9239c19373bbb7c70b51ad595b619a745d08b2ecb62af02c4814b78c690
 ```
 
 You can also verify a manifest file directly:
 
 ```bash
-node scripts/sek-verify.mjs verify examples/marketplace-refund/manifest.json
+node scripts/veripacket-verify.mjs verify examples/marketplace-refund/manifest.json
 ```
 
 ## Packet Format Notes
@@ -145,7 +145,7 @@ styles.css                  App UI styles
 schema/                     Open Evidence Packet Format schema
 docs/                       Integrity, redaction, and boundary docs
 legal-packs/                KR/US general-information checklist drafts
-scripts/sek-verify.mjs      Node CLI verifier
+scripts/veripacket-verify.mjs      Node CLI verifier
 examples/                   Sample evidence packet fixtures
 outputs/                    Research and product planning artifacts
 ```

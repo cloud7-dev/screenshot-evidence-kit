@@ -1,10 +1,10 @@
-# Screenshot Evidence Kit v0.3 Launch Copy
+# VeriPacket v0.3 Launch Copy
 
 ## GitHub Release Draft
 
 Title: `v0.3.0 - ZIP packet verification and PDF cover export`
 
-Screenshot Evidence Kit v0.3 makes the local-first evidence packet flow verifiable end to end. Users can load the sample case, export an `evidence-packet.zip`, and verify the ZIP locally in the browser or CLI without uploading screenshots to a server.
+VeriPacket v0.3 makes the local-first evidence packet flow verifiable end to end. Users can load the sample case, export an `evidence-packet.zip`, and verify the ZIP locally in the browser or CLI without uploading screenshots to a server.
 
 Highlights:
 
@@ -25,7 +25,7 @@ Boundaries:
 
 Title: `Show HN: Local-first screenshot evidence packet builder`
 
-I built Screenshot Evidence Kit, a static local-first web app for organizing dispute screenshots into a chronological evidence packet.
+I built VeriPacket, a static local-first web app for organizing dispute screenshots into a chronological evidence packet.
 
 It runs in the browser with no server upload. v0.3 exports an `evidence-packet.zip` containing a manifest, hashes, HTML/PDF packet covers, redacted renders, and optional originals. The same packet can be verified locally in the browser or CLI with SHA-256 hashes, a canonical manifest digest, and a packet root.
 
@@ -39,7 +39,7 @@ Repo: https://github.com/cloud7-dev/screenshot-evidence-kit
 
 I made a small local-first tool for people who need to organize screenshots for refunds, marketplace disputes, defective goods, or support claims.
 
-Screenshot Evidence Kit runs as a static web app. It does not upload screenshots. You can load a sample case, redact sensitive areas, export an `evidence-packet.zip`, and verify the ZIP locally.
+VeriPacket runs as a static web app. It does not upload screenshots. You can load a sample case, redact sensitive areas, export an `evidence-packet.zip`, and verify the ZIP locally.
 
 What v0.3 includes:
 

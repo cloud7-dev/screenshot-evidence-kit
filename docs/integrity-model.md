@@ -1,6 +1,6 @@
 # Integrity Model
 
-Screenshot Evidence Kit v1 uses local integrity checks. It does not use blockchain, cloud notarization, or external timestamp authorities by default.
+VeriPacket v1 uses local integrity checks. It does not use blockchain, cloud notarization, or external timestamp authorities by default.
 
 ## Guarantees
 
@@ -22,7 +22,7 @@ Screenshot Evidence Kit v1 uses local integrity checks. It does not use blockcha
 1. Hash each original imported file with SHA-256.
 2. Hash each rendered/redacted submission file with SHA-256.
 3. Record file paths, hashes, timestamps, redactions, and notes in `manifest.json`.
-4. Canonicalize the manifest with `sek-canonical-json-v1`.
+4. Canonicalize the manifest with `oep-canonical-json-v1`.
 5. Set `integrity.manifestDigest` to 64 zeroes while computing the canonical digest.
 6. Store the computed digest in `integrity.manifestDigest`.
 7. Embed the digest in exported PDFs or packet summaries.

@@ -1,10 +1,10 @@
-# Screenshot Evidence Kit OSS Research
+# VeriPacket OSS Research
 
 작성일: 2026-06-02
 
 ## 한 줄 결론
 
-`Screenshot Evidence Kit`은 전문 법무/OSINT 수사 도구가 아니라, 일반 사용자가 거래, 분쟁, 환불, 하자, 중고거래 증거 스크린샷을 로컬에서 시간순 PDF evidence packet으로 정리하는 오픈소스 도구로 포지셔닝하는 것이 가장 유망하다.
+`VeriPacket`은 전문 법무/OSINT 수사 도구가 아니라, 일반 사용자가 거래, 분쟁, 환불, 하자, 중고거래 증거 스크린샷을 로컬에서 시간순 PDF evidence packet으로 정리하는 오픈소스 도구로 포지셔닝하는 것이 가장 유망하다.
 
 핵심 차별화는 "서버 업로드 없는 local-first 증거 패킷 생성", "시간순 사건 타임라인", "해시/메타데이터/개인정보 삭제를 사용자가 이해할 수 있는 방식으로 제공", "법적 효력을 과장하지 않는 투명한 무결성 모델"이다.
 
@@ -97,7 +97,7 @@
 
 ## README positioning 첫 문단 초안
 
-`Screenshot Evidence Kit` is a local-first, privacy-first web app for turning messy dispute screenshots into a clear, chronological PDF evidence packet. Drop in screenshots from chats, marketplaces, orders, payments, repairs, or refund conversations; add short notes and timestamps; redact sensitive details; and export a self-contained PDF with hashes and a machine-readable manifest. Nothing is uploaded to a server, and the project is designed to document integrity without pretending to replace legal advice or professional forensic collection.
+`VeriPacket` is a local-first, privacy-first web app for turning messy dispute screenshots into a clear, chronological PDF evidence packet. Drop in screenshots from chats, marketplaces, orders, payments, repairs, or refund conversations; add short notes and timestamps; redact sensitive details; and export a self-contained PDF with hashes and a machine-readable manifest. Nothing is uploaded to a server, and the project is designed to document integrity without pretending to replace legal advice or professional forensic collection.
 
 ## 데모 시나리오
 
@@ -208,7 +208,7 @@
 
 신청서용 짧은 논리:
 
-> Screenshot Evidence Kit helps people document everyday digital disputes without uploading sensitive evidence to a server. Codex credits would be used for PDF rendering tests, privacy/security review, issue triage, and release automation for a local-first evidence workflow.
+> VeriPacket helps people document everyday digital disputes without uploading sensitive evidence to a server. Codex credits would be used for PDF rendering tests, privacy/security review, issue triage, and release automation for a local-first evidence workflow.
 
 ## 증거 무결성, 메타데이터, 개인정보 리스크
 

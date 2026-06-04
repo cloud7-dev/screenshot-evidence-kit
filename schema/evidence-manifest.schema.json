@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://screenshot-evidence-kit.dev/schema/evidence-manifest.schema.json",
+  "$id": "https://cloud7-dev.github.io/screenshot-evidence-kit/schema/evidence-manifest.schema.json",
   "title": "Open Evidence Packet Manifest",
   "description": "Technical manifest for local-first screenshot evidence packets. This is not a legal evidence standard and does not guarantee admissibility.",
   "type": "object",
@@ -147,7 +147,7 @@
         },
         "canonicalization": {
           "type": "string",
-          "enum": ["sek-canonical-json-v1"]
+          "enum": ["oep-canonical-json-v1"]
         },
         "manifestDigest": {
           "type": "string",

@@ -298,11 +298,11 @@ function manifestWithoutDigest() {
         ];
   const manifest = {
     formatVersion: "1.0.0",
-    packetId: `sek-${Date.now()}`,
+    packetId: `vp-${Date.now()}`,
     generatedBy: {
-      appName: "Screenshot Evidence Kit",
+      appName: "VeriPacket",
       appVersion: APP_VERSION,
-      website: "https://screenshot-evidence-kit.dev"
+      website: "https://cloud7-dev.github.io/screenshot-evidence-kit/"
     },
     createdAt: nowIso(),
     jurisdiction: {
@@ -346,7 +346,7 @@ function manifestWithoutDigest() {
     },
     integrity: {
       hashAlgorithm: "SHA-256",
-      canonicalization: "sek-canonical-json-v1",
+      canonicalization: "oep-canonical-json-v1",
       manifestDigest: ZERO_DIGEST,
       packetRoot: ZERO_DIGEST,
       timestampProof: null
@@ -459,7 +459,7 @@ function wrapText(value, maxLength = 86) {
 
 function packetPdfLines(manifest) {
   const lines = [
-    "Screenshot Evidence Kit - Evidence Packet Cover",
+    "VeriPacket - Evidence Packet Cover",
     "",
     `Case: ${manifest.case.title}`,
     `Created: ${manifest.createdAt}`,
@@ -1131,7 +1131,7 @@ els.verifySampleButton.addEventListener("click", async () => {
   els.verifyOutput.textContent = [
     "Loaded sample manifest.",
     "To verify sample files in the browser, choose the sample files from examples/marketplace-refund.",
-    "CLI verification is available with: ./scripts/sek-verify.mjs verify examples/marketplace-refund"
+    "CLI verification is available with: ./scripts/veripacket-verify.mjs verify examples/marketplace-refund"
   ].join("\n");
 });
 

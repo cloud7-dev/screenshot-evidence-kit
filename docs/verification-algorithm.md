@@ -1,6 +1,6 @@
 # Verification Algorithm
 
-This document defines `sek-canonical-json-v1`.
+This document defines `oep-canonical-json-v1`.
 
 ## Canonical JSON
 
@@ -59,9 +59,9 @@ The packet passes when:
 The CLI accepts either a manifest file or a packet folder:
 
 ```bash
-./scripts/sek-verify.mjs verify examples/marketplace-refund/manifest.json
-./scripts/sek-verify.mjs verify examples/marketplace-refund
-./scripts/sek-verify.mjs verify examples/marketplace-refund/evidence-packet.zip
+./scripts/veripacket-verify.mjs verify examples/marketplace-refund/manifest.json
+./scripts/veripacket-verify.mjs verify examples/marketplace-refund
+./scripts/veripacket-verify.mjs verify examples/marketplace-refund/evidence-packet.zip
 ```
 
 When a folder is passed, the verifier looks for `manifest.json` first, then `evidence-manifest.json`.

@@ -20,6 +20,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check app.js
+          node --check scripts/veripacket-verify.mjs
           node --check scripts/sek-verify.mjs
 
       - name: Parse JSON fixtures
@@ -28,6 +29,6 @@ jobs:
 
       - name: Verify sample packet
         run: |
-          ./scripts/sek-verify.mjs verify examples/marketplace-refund
-          ./scripts/sek-verify.mjs verify examples/marketplace-refund/manifest.json
-          ./scripts/sek-verify.mjs verify examples/marketplace-refund/evidence-packet.zip
+          ./scripts/veripacket-verify.mjs verify examples/marketplace-refund
+          ./scripts/veripacket-verify.mjs verify examples/marketplace-refund/manifest.json
+          ./scripts/veripacket-verify.mjs verify examples/marketplace-refund/evidence-packet.zip

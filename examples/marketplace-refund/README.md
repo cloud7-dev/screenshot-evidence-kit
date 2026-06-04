@@ -14,8 +14,8 @@ It contains:
 Run:
 
 ```bash
-../../scripts/sek-verify.mjs verify .
-../../scripts/sek-verify.mjs verify evidence-packet.zip
+../../scripts/veripacket-verify.mjs verify .
+../../scripts/veripacket-verify.mjs verify evidence-packet.zip
 ```
 
 The verifier does not prove the screenshot content is true. It only checks that the files match the hashes recorded in the manifest.

@@ -2,9 +2,9 @@
   "formatVersion": "1.0.0",
   "packetId": "sample-marketplace-refund-001",
   "generatedBy": {
-    "appName": "Screenshot Evidence Kit",
+    "appName": "VeriPacket",
     "appVersion": "0.3.0",
-    "website": "https://screenshot-evidence-kit.dev"
+    "website": "https://cloud7-dev.github.io/screenshot-evidence-kit/"
   },
   "createdAt": "2026-06-04T00:00:00Z",
   "jurisdiction": {
@@ -60,9 +60,9 @@
   "packetArtifacts": [
     {
       "path": "packet.html",
-      "sha256": "a2b68f4ae5e5a6740883f3c86478965f2eaba0a3deb7f765298a773a7463e432",
+      "sha256": "89856b72fff1bbd8439819013c07e21549fa8db63bf9e8b9e0fffd3101a46609",
       "mimeType": "text/html",
-      "sizeBytes": 875
+      "sizeBytes": 899
     }
   ],
   "packetOptions": {
@@ -70,8 +70,8 @@
   },
   "integrity": {
     "hashAlgorithm": "SHA-256",
-    "canonicalization": "sek-canonical-json-v1",
-    "manifestDigest": "1d1c7b6c0b3975796366f3e1258479cb8feff56dbb655051d4ef30a8f6ecb2b9",
+    "canonicalization": "oep-canonical-json-v1",
+    "manifestDigest": "9b11b9239c19373bbb7c70b51ad595b619a745d08b2ecb62af02c4814b78c690",
     "packetRoot": "274b99fed572b54b2eb64f538628f279e7f04bf69d76a3e49e320c5c237d081a",
     "timestampProof": null
   },

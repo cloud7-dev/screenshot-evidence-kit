@@ -1,4 +1,4 @@
-# Screenshot Evidence Kit v1 KR/US Legal Product Plan
+# VeriPacket v1 KR/US Legal Product Plan
 
 작성일: 2026-06-03
 
@@ -430,7 +430,7 @@ legal-packs/
 
 추천 첫 문단:
 
-`Screenshot Evidence Kit` is a local-first evidence packet builder for everyday disputes, with separate Korea and United States modes. It helps you turn screenshots from chats, orders, payments, deliveries, refunds, and defects into a chronological PDF packet with redactions, hashes, a machine-readable manifest, and jurisdiction-aware documentation checklists. It does not upload your evidence, does not give legal advice, and does not guarantee admissibility.
+`VeriPacket` is a local-first evidence packet builder for everyday disputes, with separate Korea and United States modes. It helps you turn screenshots from chats, orders, payments, deliveries, refunds, and defects into a chronological PDF packet with redactions, hashes, a machine-readable manifest, and jurisdiction-aware documentation checklists. It does not upload your evidence, does not give legal advice, and does not guarantee admissibility.
 
 추천 배지:
 
