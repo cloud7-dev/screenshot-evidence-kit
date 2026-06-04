@@ -261,7 +261,7 @@ function verifyPacket(inputPath) {
     }
   }
 
-  return { checks, failures, actualManifestDigest, skipped };
+  return { checks, failures, actualManifestDigest, skipped, review: manifest.review ?? null };
 }
 
 function printUsage() {
@@ -298,6 +298,9 @@ try {
     }
     console.log("");
     console.log(`Verification passed. manifestDigest=${result.actualManifestDigest}`);
+    if (result.review) {
+      console.log(`Smart Review: ${result.review.score}/100 (${result.review.highestSeverity})`);
+    }
     if (result.skipped.length > 0) {
       console.log("Some checks were skipped because originals were excluded.");
     }

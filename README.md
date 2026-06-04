@@ -22,6 +22,7 @@ Sample evidence screenshot:
 - Creates separate redacted submission renders.
 - Exports `evidence-packet.zip` with `manifest.json`, `hashes.txt`, `packet.html`, `packet.pdf`, `rendered/`, and optional `originals/`.
 - Verifies ZIP packets, SHA-256 file hashes, manifest digest, and packet root locally.
+- Runs a local Smart Review for missing timestamps, generic sources, thin notes, duplicate files, original-exclusion limits, and possible sensitive metadata.
 - Provides Korea and United States general-information checklist groundwork.
 
 ## What It Does Not Do
@@ -30,7 +31,8 @@ Sample evidence screenshot:
 - It does not recommend lawyers.
 - It does not guarantee admissibility.
 - It does not prove screenshot contents are true.
-- It does not use blockchain in v0.3.
+- It does not use blockchain in v0.4.
+- It does not run OCR or AI image understanding in the dependency-free public app yet.
 
 ## Demo Flow
 
@@ -59,11 +61,12 @@ Core workflow:
 1. Add screenshots by drag and drop, file picker, or clipboard paste.
 2. Edit case details, country mode, timeline source, timestamp, and notes.
 3. Add opaque redaction rectangles to create a separate submission render.
-4. Keep `Include originals in ZIP` on for full local verification, or turn it off for a privacy-reduced packet.
-5. Export `evidence-packet.zip` or a standalone `packet.pdf` cover.
-6. Verify the ZIP, manifest folder, or manifest file locally.
+4. Check Smart Review warnings for missing timestamps, generic sources, short notes, duplicate files, or sensitive metadata hints.
+5. Keep `Include originals in ZIP` on for full local verification, or turn it off for a privacy-reduced packet.
+6. Export `evidence-packet.zip` or a standalone `packet.pdf` cover.
+7. Verify the ZIP, manifest folder, or manifest file locally.
 
-`packet.html` is designed for browser print-to-PDF. v0.3 also exports a basic `packet.pdf` cover containing the manifest digest, packet root, timeline, and limitations.
+`packet.html` is designed for browser print-to-PDF. v0.4 also exports a basic `packet.pdf` cover containing the manifest digest, packet root, timeline, Smart Review summary, and limitations.
 
 ## What Is Public
 
@@ -118,7 +121,8 @@ ok hashes.txt:rendered/chat-001-redacted.svg
 ok hashes.txt:packet.html
 ok hashes.txt:packet.pdf
 
-Verification passed. manifestDigest=9b11b9239c19373bbb7c70b51ad595b619a745d08b2ecb62af02c4814b78c690
+Verification passed. manifestDigest=19b5982b7745a3aacc965ed8c7a115e824d4a0af88a2c024f8cbc7c9ee1b0b7c
+Smart Review: 100/100 (pass)
 ```
 
 You can also verify a manifest file directly:
@@ -134,7 +138,8 @@ node scripts/veripacket-verify.mjs verify examples/marketplace-refund/manifest.j
 - `packetRoot` is a Merkle root over evidence item original/rendered hashes.
 - `manifestDigest` is computed from canonical JSON with `integrity.manifestDigest` zeroed during calculation.
 - `packetOptions.originalsIncluded=false` means original file hashes remain recorded, but original file reads are skipped unless those files are supplied separately.
-- Timestamp proof is intentionally optional and not part of v0.3.
+- `review` records the local Smart Review score and findings. v0.4 review is metadata-based: it checks timestamps, source labels, notes, file duplication, original-exclusion limits, and sensitive text hints from user-entered fields and filenames. It does not inspect image pixels.
+- Timestamp proof is intentionally optional and not part of v0.4.
 
 ## Repository Layout
 
@@ -144,6 +149,7 @@ app.js                      Browser-only packet builder and verifier
 styles.css                  App UI styles
 schema/                     Open Evidence Packet Format schema
 docs/                       Integrity, redaction, and boundary docs
+docs/smart-review.md        v0.4 local packet-quality review scope
 legal-packs/                KR/US general-information checklist drafts
 scripts/veripacket-verify.mjs      Node CLI verifier
 examples/                   Sample evidence packet fixtures

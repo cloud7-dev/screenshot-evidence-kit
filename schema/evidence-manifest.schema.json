@@ -136,6 +136,59 @@
         "originalsIncluded": { "type": "boolean" }
       }
     },
+    "review": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["engine", "scope", "ocr", "score", "highestSeverity", "findingCount", "findings"],
+      "properties": {
+        "engine": { "type": "string", "minLength": 1 },
+        "scope": {
+          "type": "string",
+          "enum": ["metadata-redaction-quality"]
+        },
+        "ocr": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "reason"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "reason": { "type": "string" }
+          }
+        },
+        "score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "highestSeverity": {
+          "type": "string",
+          "enum": ["pass", "info", "warning", "critical"]
+        },
+        "findingCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "severity", "code", "title", "detail", "evidenceItemId"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "severity": {
+                "type": "string",
+                "enum": ["info", "warning", "critical"]
+              },
+              "code": { "type": "string", "minLength": 1 },
+              "title": { "type": "string", "minLength": 1 },
+              "detail": { "type": "string", "minLength": 1 },
+              "evidenceItemId": { "type": ["string", "null"] }
+            }
+          }
+        }
+      }
+    },
     "integrity": {
       "type": "object",
       "required": ["hashAlgorithm", "canonicalization", "manifestDigest"],

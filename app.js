@@ -1,5 +1,6 @@
 const ZERO_DIGEST = "0".repeat(64);
-const APP_VERSION = "0.3.0";
+const APP_VERSION = "0.4.0";
+const REVIEW_ENGINE_VERSION = "smart-review-v1";
 
 const state = {
   items: [],
@@ -44,6 +45,10 @@ const els = {
   downloadHashesButton: document.querySelector("#downloadHashesButton"),
   downloadRendersButton: document.querySelector("#downloadRendersButton"),
   downloadPacketButton: document.querySelector("#downloadPacketButton"),
+  smartReviewScore: document.querySelector("#smartReviewScore"),
+  smartReviewSummary: document.querySelector("#smartReviewSummary"),
+  smartReviewList: document.querySelector("#smartReviewList"),
+  runSmartReviewButton: document.querySelector("#runSmartReviewButton"),
   verifyZipInput: document.querySelector("#verifyZipInput"),
   verifyManifestInput: document.querySelector("#verifyManifestInput"),
   verifyFilesInput: document.querySelector("#verifyFilesInput"),
@@ -281,6 +286,108 @@ function caseSummaryLines() {
     .filter(Boolean);
 }
 
+function containsSensitiveCandidate(value) {
+  const text = String(value ?? "");
+  return [
+    /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i,
+    /\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/,
+    /\b01[016789][-.\s]?\d{3,4}[-.\s]?\d{4}\b/,
+    /\b\d{3}[-.\s]?\d{2}[-.\s]?\d{4}\b/,
+    /\b(?:account|address|phone|email|ssn|계좌|주소|전화|이메일|주민등록)\b/i
+  ].some((pattern) => pattern.test(text));
+}
+
+function addReviewFinding(findings, severity, code, title, detail, evidenceItemId = null) {
+  findings.push({
+    id: `SR-${String(findings.length + 1).padStart(3, "0")}`,
+    severity,
+    code,
+    title,
+    detail,
+    evidenceItemId
+  });
+}
+
+function smartReview(manifest) {
+  const findings = [];
+  const items = manifest.evidenceItems ?? [];
+  const summaryLines = manifest.case?.summary ?? [];
+  const originalHashes = new Map();
+
+  if (items.length === 0) {
+    addReviewFinding(findings, "critical", "no-evidence-items", "No evidence items", "Add at least one screenshot before exporting.");
+  }
+  if (!manifest.case?.requestedOutcome?.trim()) {
+    addReviewFinding(findings, "warning", "missing-requested-outcome", "Requested outcome missing", "State what refund, repair, reimbursement, or response you are asking for.");
+  }
+  if (summaryLines.length < 2) {
+    addReviewFinding(findings, "warning", "thin-case-summary", "Case summary is thin", "Add two or more short factual summary lines so the packet has context.");
+  }
+  if (!items.some((item) => item.keyEvidence)) {
+    addReviewFinding(findings, "warning", "no-key-evidence", "No key evidence marked", "Mark the most important screenshot as key evidence.");
+  }
+  if (manifest.packetOptions?.originalsIncluded === false) {
+    addReviewFinding(findings, "info", "originals-excluded", "Originals excluded", "Original hashes remain recorded, but full original-file verification requires separately supplied originals.");
+  }
+
+  for (const item of items) {
+    if (!item.capturedAt) {
+      addReviewFinding(findings, "warning", "missing-captured-at", "Missing captured timestamp", "Add a captured/imported time for this screenshot.", item.id);
+    } else if (item.importedAt && new Date(item.capturedAt).getTime() > new Date(item.importedAt).getTime()) {
+      addReviewFinding(findings, "warning", "captured-after-imported", "Captured time is after import time", "Check whether this timestamp was entered incorrectly.", item.id);
+    }
+    if (!item.sourceLabel || item.sourceLabel.toLowerCase() === "screenshot") {
+      addReviewFinding(findings, "warning", "generic-source", "Source label is generic", "Name the source, such as marketplace chat, order page, payment receipt, or repair invoice.", item.id);
+    }
+    if (!item.note?.trim()) {
+      addReviewFinding(findings, "warning", "missing-note", "Evidence note missing", "Add a short factual note explaining why this screenshot matters.", item.id);
+    }
+    const originalHash = item.files?.original?.sha256;
+    if (originalHash) {
+      if (originalHashes.has(originalHash)) {
+        addReviewFinding(findings, "info", "duplicate-original-hash", "Duplicate original hash", `This file appears to match ${originalHashes.get(originalHash)}. Confirm the duplicate is intentional.`, item.id);
+      } else {
+        originalHashes.set(originalHash, item.id);
+      }
+    }
+    const textForSensitiveReview = [
+      item.sourceLabel,
+      item.note,
+      item.files?.original?.path,
+      ...summaryLines
+    ].join("\n");
+    if (containsSensitiveCandidate(textForSensitiveReview) && item.redactions.length === 0) {
+      addReviewFinding(findings, "warning", "sensitive-text-no-redaction", "Possible sensitive text without redaction", "Review this screenshot for phone, email, address, account, or ID details before sharing.", item.id);
+    }
+  }
+
+  const penalty = findings.reduce((total, finding) => {
+    if (finding.severity === "critical") return total + 30;
+    if (finding.severity === "warning") return total + 10;
+    return total + 3;
+  }, 0);
+  const score = Math.max(0, 100 - penalty);
+  const highestSeverity = findings.some((finding) => finding.severity === "critical")
+    ? "critical"
+    : findings.some((finding) => finding.severity === "warning")
+      ? "warning"
+      : findings.some((finding) => finding.severity === "info")
+        ? "info"
+        : "pass";
+  return {
+    engine: REVIEW_ENGINE_VERSION,
+    scope: "metadata-redaction-quality",
+    ocr: {
+      enabled: false,
+      reason: "Dependency-free v0.4 review uses local metadata, notes, filenames, timestamps, and redaction state only."
+    },
+    score,
+    highestSeverity,
+    findingCount: findings.length,
+    findings
+  };
+}
+
 function manifestWithoutDigest() {
   const originalsIncluded = Boolean(els.includeOriginalsInput.checked);
   const legalModeLimitations = els.country.value === "KR"
@@ -344,6 +451,7 @@ function manifestWithoutDigest() {
     packetOptions: {
       originalsIncluded
     },
+    review: null,
     integrity: {
       hashAlgorithm: "SHA-256",
       canonicalization: "oep-canonical-json-v1",
@@ -362,6 +470,7 @@ function manifestWithoutDigest() {
       ...legalModeLimitations
     ]
   };
+  manifest.review = smartReview(manifest);
   return manifest;
 }
 
@@ -471,6 +580,7 @@ function packetPdfLines(manifest) {
     `Manifest digest: ${manifest.integrity.manifestDigest}`,
     `Packet root: ${manifest.integrity.packetRoot}`,
     `Original files included: ${manifest.packetOptions?.originalsIncluded === false ? "No" : "Yes"}`,
+    `Smart review: ${manifest.review?.score ?? "Not run"}/100 (${manifest.review?.highestSeverity ?? "unknown"})`,
     "",
     "Timeline"
   ];
@@ -479,6 +589,16 @@ function packetPdfLines(manifest) {
     for (const noteLine of wrapText(item.note || "No note provided.", 78)) {
       lines.push(`  ${noteLine}`);
     }
+  }
+  lines.push("", "Smart Review");
+  for (const finding of manifest.review?.findings ?? []) {
+    lines.push(`${finding.severity.toUpperCase()} ${finding.code}${finding.evidenceItemId ? ` ${finding.evidenceItemId}` : ""}`);
+    for (const detailLine of wrapText(finding.detail, 78)) {
+      lines.push(`  ${detailLine}`);
+    }
+  }
+  if ((manifest.review?.findings ?? []).length === 0) {
+    lines.push("No review findings.");
   }
   lines.push("", "Limitations");
   for (const limitation of manifest.limitations) {
@@ -555,6 +675,9 @@ function downloadText(text, filename, type = "text/plain") {
 }
 
 function packetHtml(manifest) {
+  const reviewRows = (manifest.review?.findings ?? [])
+    .map((finding) => `<tr><td>${escapeHtml(finding.severity)}</td><td>${escapeHtml(finding.code)}</td><td>${escapeHtml(finding.evidenceItemId || "")}</td><td>${escapeHtml(finding.detail)}</td></tr>`)
+    .join("");
   const itemSections = state.items
     .map((item) => {
       const manifestItem = manifest.evidenceItems.find((entry) => entry.id === item.id);
@@ -600,6 +723,7 @@ function packetHtml(manifest) {
     <tr><th>Dispute type</th><td>${manifest.case.disputeType}</td></tr>
     <tr><th>Manifest digest</th><td class="digest">Recorded in manifest.json</td></tr>
     <tr><th>Packet root</th><td class="digest">${manifest.integrity.packetRoot}</td></tr>
+    <tr><th>Smart review</th><td>${manifest.review?.score ?? "Not run"}/100 (${escapeHtml(manifest.review?.highestSeverity || "unknown")})</td></tr>
   </table>
   <h2>Summary</h2>
   <ul>${manifest.case.summary.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
@@ -610,10 +734,16 @@ function packetHtml(manifest) {
       .map((item) => `<tr><td>${item.id}</td><td>${escapeHtml(item.capturedAt || "")}</td><td>${escapeHtml(item.sourceLabel)}</td><td>${escapeHtml(item.note)}</td></tr>`)
       .join("")}</tbody>
   </table>
+  <h2>Smart Review</h2>
+  <p>Score: ${manifest.review?.score ?? "Not run"}/100. Scope: metadata, timestamps, notes, filenames, redactions, and packet options.</p>
+  <table>
+    <thead><tr><th>Severity</th><th>Code</th><th>Item</th><th>Detail</th></tr></thead>
+    <tbody>${reviewRows || '<tr><td colspan="4">No review findings.</td></tr>'}</tbody>
+  </table>
   <h2>Limitations</h2>
   <ul>${manifest.limitations.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>
   <h2>Print to PDF</h2>
-  <p>Use your browser print dialog and choose Save as PDF. Native binary PDF export is not included in this v0.2 static app.</p>
+  <p>Use your browser print dialog and choose Save as PDF, or export the companion packet.pdf cover from the app.</p>
   ${itemSections}
 </body>
 </html>`;
@@ -811,6 +941,7 @@ async function exportZipPacket() {
 function render() {
   renderTimeline();
   renderInspector();
+  renderSmartReview();
 }
 
 function renderTimeline() {
@@ -852,6 +983,34 @@ function renderInspector() {
   els.originalHash.textContent = item.originalSha256;
   els.renderedHash.textContent = item.renderedSha256;
   renderRedactions(item);
+}
+
+function renderSmartReview() {
+  if (!els.smartReviewScore || !els.smartReviewList) return;
+  if (state.items.length === 0) {
+    els.smartReviewScore.textContent = "--";
+    els.smartReviewSummary.textContent = "Add evidence to review packet quality.";
+    els.smartReviewList.innerHTML = "";
+    return;
+  }
+  const review = smartReview(manifestWithoutDigest());
+  els.smartReviewScore.textContent = String(review.score);
+  els.smartReviewSummary.textContent = review.findingCount === 0
+    ? "No review findings."
+    : `${review.findingCount} finding${review.findingCount === 1 ? "" : "s"} before export.`;
+  els.smartReviewList.innerHTML = "";
+  for (const finding of review.findings) {
+    const node = document.createElement("article");
+    node.className = "review-finding";
+    node.innerHTML = `
+      <span class="review-severity ${escapeHtml(finding.severity)}">${escapeHtml(finding.severity)}</span>
+      <div>
+        <h3>${escapeHtml(finding.title)}${finding.evidenceItemId ? ` · ${escapeHtml(finding.evidenceItemId)}` : ""}</h3>
+        <p>${escapeHtml(finding.detail)}</p>
+      </div>
+    `;
+    els.smartReviewList.append(node);
+  }
 }
 
 function renderRedactions(item) {
@@ -908,6 +1067,7 @@ async function updateSelectedFromInspector() {
   item.note = els.itemNote.value.trim();
   item.keyEvidence = els.itemKeyEvidence.checked;
   renderTimeline();
+  renderSmartReview();
 }
 
 function basename(pathValue) {
@@ -967,6 +1127,9 @@ async function runVerify() {
     if (actualPacketRoot !== state.verifyManifest.integrity.packetRoot) {
       failures.push(`packet root mismatch: expected ${state.verifyManifest.integrity.packetRoot}, got ${actualPacketRoot}`);
     }
+  }
+  if (state.verifyManifest.review) {
+    logs.push(`info smart review score ${state.verifyManifest.review.score}/100 (${state.verifyManifest.review.highestSeverity})`);
   }
   const fileMap = verifyFileMap();
   const expectedFiles = [];
@@ -1059,11 +1222,28 @@ document.addEventListener("paste", async (event) => {
   }
 });
 
-els.country.addEventListener("change", updateLegalPackDefault);
+els.country.addEventListener("change", () => {
+  updateLegalPackDefault();
+  renderSmartReview();
+});
+for (const input of [
+  els.caseTitle,
+  els.disputeType,
+  els.requestedOutcome,
+  els.stateOrProvince,
+  els.language,
+  els.legalPackVersion,
+  els.caseSummary,
+  els.includeOriginalsInput
+]) {
+  input.addEventListener("input", renderSmartReview);
+  input.addEventListener("change", renderSmartReview);
+}
 for (const input of [els.itemSource, els.itemCapturedAt, els.itemNote, els.itemKeyEvidence]) {
   input.addEventListener("input", updateSelectedFromInspector);
   input.addEventListener("change", updateSelectedFromInspector);
 }
+els.runSmartReviewButton.addEventListener("click", renderSmartReview);
 els.addRedactionButton.addEventListener("click", async () => {
   const item = selectedItem();
   if (!item) return;

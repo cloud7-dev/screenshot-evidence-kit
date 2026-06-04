@@ -114,6 +114,18 @@ The packet documents the timeline and integrity metadata.</textarea>
         <div id="timeline" class="timeline empty">
           <p>Evidence items will appear here after you add screenshots.</p>
         </div>
+
+        <section class="review-panel" aria-labelledby="smartReviewHeading">
+          <div class="review-header">
+            <div>
+              <h2 id="smartReviewHeading">Smart Review</h2>
+              <p id="smartReviewSummary">Add evidence to review packet quality.</p>
+            </div>
+            <div class="review-score" id="smartReviewScore">--</div>
+          </div>
+          <button id="runSmartReviewButton" type="button">Refresh review</button>
+          <div id="smartReviewList" class="review-list"></div>
+        </section>
       </section>
 
       <aside class="inspector">
