@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://screenshot-evidence-kit.dev/schema/evidence-manifest.schema.json",
+  "title": "Open Evidence Packet Manifest",
+  "description": "Technical manifest for local-first screenshot evidence packets. This is not a legal evidence standard and does not guarantee admissibility.",
+  "type": "object",
+  "required": [
+    "formatVersion",
+    "packetId",
+    "generatedBy",
+    "createdAt",
+    "jurisdiction",
+    "case",
+    "evidenceItems",
+    "integrity",
+    "limitations"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "formatVersion": {
+      "type": "string",
+      "pattern": "^1\\.0\\.0$"
+    },
+    "packetId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generatedBy": {
+      "type": "object",
+      "required": ["appName", "appVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "appName": { "type": "string", "minLength": 1 },
+        "appVersion": { "type": "string", "minLength": 1 },
+        "website": { "type": "string" }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "jurisdiction": {
+      "type": "object",
+      "required": ["country", "language", "legalPackVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "country": {
+          "type": "string",
+          "enum": ["KR", "US", "UNSPECIFIED"]
+        },
+        "stateOrProvince": {
+          "type": ["string", "null"]
+        },
+        "language": {
+          "type": "string",
+          "minLength": 2
+        },
+        "legalPackVersion": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "required": ["title", "disputeType", "summary", "requestedOutcome"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "disputeType": { "type": "string", "minLength": 1 },
+        "requestedOutcome": { "type": "string" },
+        "summary": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "evidenceItems": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "sourceLabel",
+          "capturedAt",
+          "importedAt",
+          "note",
+          "files",
+          "redactions"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "sourceLabel": { "type": "string", "minLength": 1 },
+          "capturedAt": { "type": ["string", "null"], "format": "date-time" },
+          "importedAt": { "type": "string", "format": "date-time" },
+          "note": { "type": "string" },
+          "keyEvidence": { "type": "boolean" },
+          "files": {
+            "type": "object",
+            "required": ["original", "rendered"],
+            "additionalProperties": false,
+            "properties": {
+              "original": { "$ref": "#/$defs/packetFile" },
+              "rendered": { "$ref": "#/$defs/packetFile" }
+            }
+          },
+          "redactions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "label", "x", "y", "width", "height"],
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "label": { "type": "string" },
+                "x": { "type": "number" },
+                "y": { "type": "number" },
+                "width": { "type": "number" },
+                "height": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "packetArtifacts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/packetFile" }
+    },
+    "integrity": {
+      "type": "object",
+      "required": ["hashAlgorithm", "canonicalization", "manifestDigest"],
+      "additionalProperties": false,
+      "properties": {
+        "hashAlgorithm": {
+          "type": "string",
+          "enum": ["SHA-256"]
+        },
+        "canonicalization": {
+          "type": "string",
+          "enum": ["sek-canonical-json-v1"]
+        },
+        "manifestDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "packetRoot": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "timestampProof": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["RFC3161", "OpenTimestamps"]
+            },
+            "digestOnly": { "type": "boolean" },
+            "proofFile": { "type": "string" },
+            "createdAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "packetFile": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "mimeType": { "type": "string" },
+        "sizeBytes": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

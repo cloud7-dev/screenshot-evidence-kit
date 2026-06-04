@@ -1,0 +1,87 @@
+{
+  "formatVersion": "1.0.0",
+  "packetId": "sample-marketplace-refund-001",
+  "generatedBy": {
+    "appName": "Screenshot Evidence Kit",
+    "appVersion": "0.1.0",
+    "website": "https://screenshot-evidence-kit.dev"
+  },
+  "createdAt": "2026-06-03T00:00:00Z",
+  "jurisdiction": {
+    "country": "US",
+    "stateOrProvince": null,
+    "language": "en-US",
+    "legalPackVersion": "us-2026-06"
+  },
+  "case": {
+    "title": "Used GPU refund dispute",
+    "disputeType": "marketplace_refund",
+    "requestedOutcome": "Refund or repair reimbursement",
+    "summary": [
+      "Seller represented the item as working.",
+      "Buyer paid after the representation.",
+      "The packet demonstrates file integrity only."
+    ]
+  },
+  "evidenceItems": [
+    {
+      "id": "E-001",
+      "sourceLabel": "Marketplace chat",
+      "capturedAt": "2026-05-30T11:12:00Z",
+      "importedAt": "2026-06-03T00:00:00Z",
+      "note": "Seller represented that the item worked normally.",
+      "keyEvidence": true,
+      "files": {
+        "original": {
+          "path": "originals/chat-001.svg",
+          "sha256": "59a0e25d6bcbbfe0f8e282b70156a88259dd6cdefbb32c38e4a3a8122e17dfe3",
+          "mimeType": "image/svg+xml",
+          "sizeBytes": 789
+        },
+        "rendered": {
+          "path": "rendered/chat-001-redacted.svg",
+          "sha256": "f7028e740e1c3fbde08f289f1e0000942345426a84aa2c1ae8136e665853bd66",
+          "mimeType": "image/svg+xml",
+          "sizeBytes": 854
+        }
+      },
+      "redactions": [
+        {
+          "id": "R-001",
+          "label": "REDACTED CONTACT",
+          "x": 560,
+          "y": 300,
+          "width": 110,
+          "height": 26
+        }
+      ]
+    }
+  ],
+  "packetArtifacts": [
+    {
+      "path": "packet-summary.txt",
+      "sha256": "41b880bbf9c117f6571d17b7db5c74fbce7e4793c1ce1fa1a6f9d903eba62759",
+      "mimeType": "text/plain",
+      "sizeBytes": 268
+    },
+    {
+      "path": "hashes.txt",
+      "sha256": "4787c68a3c949ea8f2b56c5e896bc1da20d9aadfbf3550e497ce76b21a1caa02",
+      "mimeType": "text/plain",
+      "sizeBytes": 326
+    }
+  ],
+  "integrity": {
+    "hashAlgorithm": "SHA-256",
+    "canonicalization": "sek-canonical-json-v1",
+    "manifestDigest": "44456b7590da182eaa9dee8569c7117f4639cef272480614ad4b6530eaca853e",
+    "packetRoot": "274b99fed572b54b2eb64f538628f279e7f04bf69d76a3e49e320c5c237d081a",
+    "timestampProof": null
+  },
+  "limitations": [
+    "This technical packet format does not provide legal advice.",
+    "This packet does not guarantee admissibility.",
+    "File hashes verify integrity after import, not truth of screenshot content.",
+    "No blockchain or external timestamp proof is included in v1."
+  ]
+}

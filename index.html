@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Screenshot Evidence Kit</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">SEK</span>
+        <div>
+          <h1>Screenshot Evidence Kit</h1>
+          <p>Local evidence packet builder. No upload, no legal advice, no admissibility guarantee.</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="verifySampleButton" class="ghost-button" type="button">Verify sample</button>
+        <button id="newCaseButton" class="ghost-button" type="button">New case</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>Case Details</h2>
+          <label>
+            Case title
+            <input id="caseTitle" value="Used GPU refund dispute">
+          </label>
+          <label>
+            Dispute type
+            <select id="disputeType">
+              <option value="marketplace_refund">Marketplace refund</option>
+              <option value="online_shopping_refund">Online shopping refund</option>
+              <option value="defective_goods">Defective goods</option>
+              <option value="repair_defect">Repair or workmanship defect</option>
+              <option value="freelance_payment">Freelance payment</option>
+            </select>
+          </label>
+          <label>
+            Requested outcome
+            <textarea id="requestedOutcome" rows="3">Refund or repair reimbursement</textarea>
+          </label>
+        </section>
+
+        <section class="panel">
+          <h2>Jurisdiction</h2>
+          <label>
+            Country mode
+            <select id="country">
+              <option value="US">United States</option>
+              <option value="KR">Korea</option>
+              <option value="UNSPECIFIED">Unspecified</option>
+            </select>
+          </label>
+          <label>
+            State / province
+            <input id="stateOrProvince" placeholder="Optional">
+          </label>
+          <label>
+            Language
+            <select id="language">
+              <option value="en-US">English</option>
+              <option value="ko-KR">Korean</option>
+            </select>
+          </label>
+          <label>
+            Legal pack version
+            <input id="legalPackVersion" value="us-2026-06">
+          </label>
+        </section>
+
+        <section class="panel">
+          <h2>Summary</h2>
+          <textarea id="caseSummary" rows="6">Seller represented the item as working.
+Buyer paid after the representation.
+The packet documents the timeline and integrity metadata.</textarea>
+        </section>
+      </aside>
+
+      <section class="inbox">
+        <div id="dropZone" class="drop-zone" tabindex="0">
+          <input id="fileInput" type="file" accept="image/*" multiple hidden>
+          <div>
+            <strong>Add screenshots</strong>
+            <span>Drop images here, paste from clipboard, or choose files.</span>
+          </div>
+          <button id="chooseFilesButton" type="button">Choose files</button>
+        </div>
+
+        <div class="toolbar">
+          <div>
+            <h2>Evidence Timeline</h2>
+            <p id="timelineMeta">No items yet.</p>
+          </div>
+          <div class="toolbar-actions">
+            <button id="sortButton" type="button">Sort by time</button>
+            <button id="downloadManifestButton" type="button">Generate manifest</button>
+            <button id="downloadHashesButton" type="button">Export hashes.txt</button>
+            <button id="downloadRendersButton" type="button">Export renders</button>
+            <button id="downloadPacketButton" type="button">Export packet HTML</button>
+          </div>
+        </div>
+
+        <div id="timeline" class="timeline empty">
+          <p>Evidence items will appear here after you add screenshots.</p>
+        </div>
+      </section>
+
+      <aside class="inspector">
+        <section class="panel">
+          <h2>Inspector</h2>
+          <div id="inspectorEmpty" class="empty-state">Select an evidence item to edit metadata, add redactions, and inspect hashes.</div>
+          <div id="inspectorContent" hidden>
+            <div class="preview-frame">
+              <img id="previewImage" alt="Selected evidence preview">
+              <div id="redactionOverlay" class="redaction-overlay"></div>
+            </div>
+            <label>
+              Source
+              <input id="itemSource">
+            </label>
+            <label>
+              Captured at
+              <input id="itemCapturedAt" type="datetime-local">
+            </label>
+            <label>
+              Note
+              <textarea id="itemNote" rows="3"></textarea>
+            </label>
+            <label class="checkbox-label">
+              <input id="itemKeyEvidence" type="checkbox">
+              Mark as key evidence
+            </label>
+
+            <div class="hash-grid">
+              <span>Original SHA-256</span>
+              <code id="originalHash">-</code>
+              <span>Rendered SHA-256</span>
+              <code id="renderedHash">-</code>
+            </div>
+
+            <div class="redaction-header">
+              <h3>Redactions</h3>
+              <button id="addRedactionButton" type="button">Add rectangle</button>
+            </div>
+            <div id="redactionList" class="redaction-list"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Verifier</h2>
+          <label>
+            Manifest
+            <input id="verifyManifestInput" type="file" accept="application/json">
+          </label>
+          <label>
+            Supporting files
+            <input id="verifyFilesInput" type="file" multiple>
+          </label>
+          <button id="runVerifyButton" type="button">Run local verification</button>
+          <pre id="verifyOutput" class="verify-output">Waiting for manifest and files.</pre>
+        </section>
+      </aside>
+    </main>
+
+    <template id="itemTemplate">
+      <article class="evidence-card">
+        <div class="thumb-wrap">
+          <img alt="">
+        </div>
+        <div class="evidence-main">
+          <div class="card-title-row">
+            <h3></h3>
+            <span class="status-chip">verified</span>
+          </div>
+          <p class="evidence-note"></p>
+          <dl>
+            <div><dt>Captured</dt><dd class="captured"></dd></div>
+            <div><dt>SHA-256</dt><dd class="sha"></dd></div>
+          </dl>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
