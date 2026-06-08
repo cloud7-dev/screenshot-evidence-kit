@@ -60,9 +60,9 @@
   "packetArtifacts": [
     {
       "path": "packet.html",
-      "sha256": "c69bd6adb88defe774fb1d6426ea4824553651502fd89d1612a4ee26edf35b2f",
+      "sha256": "2b768a9e67c67d7b6feaced7ba1e87730bdddc9b90aaa7336a21e38438af4715",
       "mimeType": "text/html",
-      "sizeBytes": 1271
+      "sizeBytes": 1289
     }
   ],
   "packetOptions": {
@@ -83,7 +83,7 @@
   "integrity": {
     "hashAlgorithm": "SHA-256",
     "canonicalization": "oep-canonical-json-v1",
-    "manifestDigest": "19b5982b7745a3aacc965ed8c7a115e824d4a0af88a2c024f8cbc7c9ee1b0b7c",
+    "manifestDigest": "0f76f4d69220add7fc6aca6e441ec212a3a3f082eed9128c1c66e47a60985156",
     "packetRoot": "274b99fed572b54b2eb64f538628f279e7f04bf69d76a3e49e320c5c237d081a",
     "timestampProof": null
   },

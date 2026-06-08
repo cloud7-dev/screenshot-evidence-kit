@@ -1,8 +1,8 @@
-# VeriPacket v0.4 Launch Copy
+# 증거정리함 (VeriPacket) v0.4 Launch Copy
 
 Title: `v0.4.0 - Local Smart Review for evidence packets`
 
-VeriPacket v0.4 adds a local Smart Review pass for screenshot evidence packets. Before export, the app flags missing timestamps, generic source labels, thin notes, duplicate files, original-exclusion limits, and possible sensitive metadata hints. The result is recorded in `manifest.json` and shown in the HTML/PDF packet outputs.
+증거정리함 (VeriPacket) v0.4 adds a local Smart Review pass for screenshot evidence packets. Before export, the app flags missing timestamps, generic source labels, thin notes, duplicate files, original-exclusion limits, and possible sensitive metadata hints. The result is recorded in `manifest.json` and shown in the HTML/PDF packet outputs.
 
 This is not OCR, legal advice, case-strength scoring, or admissibility review. It is a practical checklist for improving packet completeness before sharing or submitting dispute documentation.
 
@@ -17,7 +17,7 @@ This is not OCR, legal advice, case-strength scoring, or admissibility review. I
 
 ## Short Launch Post
 
-VeriPacket is a local-first web app for turning dispute screenshots into chronological, verifiable evidence packets.
+증거정리함 is a local-first web app for turning dispute screenshots into chronological, verifiable evidence packets. The technical OSS/core name is VeriPacket.
 
 v0.4 adds Smart Review: a dependency-free local checklist that catches missing timestamps, generic source labels, thin notes, duplicate files, original-exclusion limits, and possible sensitive metadata hints before export.
 

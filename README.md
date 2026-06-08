@@ -1,6 +1,6 @@
-# VeriPacket
+# 증거정리함 (VeriPacket)
 
-Local-first tools and public technical documents for turning dispute screenshots into chronological, verifiable evidence packets.
+증거정리함 is the Korean user-facing name for VeriPacket: local-first tools and public technical documents for turning dispute screenshots into chronological, verifiable evidence packets.
 
 This repository publishes the **Open Evidence Packet Format**, a technical packet format for organizing screenshots, redactions, hashes, and review notes. It is not a legal evidence standard, does not provide legal advice, and does not guarantee admissibility in any court, agency, marketplace, or platform process.
 
@@ -10,7 +10,7 @@ Use the hosted static app:
 
 https://cloud7-dev.github.io/screenshot-evidence-kit/
 
-The app runs in your browser. Screenshots are processed locally and are not uploaded by this public core.
+The app runs in your browser. Screenshots are processed locally and are not uploaded by this public core. The Korean app name is **증거정리함**; the technical OSS/core name remains **VeriPacket**.
 
 Sample evidence screenshot:
 
@@ -121,7 +121,7 @@ ok hashes.txt:rendered/chat-001-redacted.svg
 ok hashes.txt:packet.html
 ok hashes.txt:packet.pdf
 
-Verification passed. manifestDigest=19b5982b7745a3aacc965ed8c7a115e824d4a0af88a2c024f8cbc7c9ee1b0b7c
+Verification passed. manifestDigest=0f76f4d69220add7fc6aca6e441ec212a3a3f082eed9128c1c66e47a60985156
 Smart Review: 100/100 (pass)
 ```
 

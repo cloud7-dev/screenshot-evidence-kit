@@ -568,7 +568,7 @@ function wrapText(value, maxLength = 86) {
 
 function packetPdfLines(manifest) {
   const lines = [
-    "VeriPacket - Evidence Packet Cover",
+    "Jeunggeo Jeongriham (VeriPacket) - Evidence Packet Cover",
     "",
     `Case: ${manifest.case.title}`,
     `Created: ${manifest.createdAt}`,
