@@ -1,5 +1,9 @@
 # 증거정리함 (VeriPacket)
 
+> [!IMPORTANT]
+> Active development moved to
+> [`cloud7-dev/open-personal-records-toolkit`](https://github.com/cloud7-dev/open-personal-records-toolkit/tree/main/apps/veripacket).
+
 증거정리함 is the Korean user-facing name for VeriPacket: local-first tools and public technical documents for turning dispute screenshots into chronological, verifiable evidence packets.
 
 This repository publishes the **Open Evidence Packet Format**, a technical packet format for organizing screenshots, redactions, hashes, and review notes. It is not a legal evidence standard, does not provide legal advice, and does not guarantee admissibility in any court, agency, marketplace, or platform process.
